@@ -1,0 +1,258 @@
+import sys
+
+
+class Solution(object):
+    def climbStairs(self, n):
+        """
+        :type n: int
+        :rtype: int
+        爬楼梯问题
+        初始化：
+            dp[]=[1,2]
+        转移：
+            dp[i] = dp[i-1]+dp[i-2]
+        """
+        record_list = [1, 2]
+        if n < 3:
+            return record_list[n-1]
+        for i in range(2, n):
+            res = record_list[0]+record_list[1]
+            record_list[0] = record_list[1]
+            record_list[1] = res
+
+        return record_list[1]
+
+    def maxSubArray(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: int
+        最大子序列和
+        f(n) = max(f(n-1)+nums[n], nums[n])
+        """
+        if len(nums)==0:
+            return
+        f_n = -1
+        res = -2**31
+        for i in range(0, len(nums)):
+            f_n = max(f_n+nums[i], nums[i])
+            res = max(res, f_n)
+        return res
+
+    def longestPalindrome(self, s):
+        """
+        :type s: str
+        :rtype: str
+        最长回文子串
+        初始化：
+            dp[i][j] = true
+        状态：
+            dp[i][j] = s[i]==s[j] and dp[i+1][j-1]
+        """
+        len_s = len(s)
+        if len_s < 2:
+            return s
+        dp = [[True for i in range(len_s)] for i in range(len_s)]
+        start, max_len = 0, 1
+        for i in range(len_s - 1, -1, -1):
+            for j in range(i + 1, len_s):
+                if s[i] == s[j]:
+                    dp[i][j] = dp[i + 1][j - 1]
+                else:
+                    dp[i][j] = False
+
+                if dp[i][j] is True:
+                    cur_len = j - i + 1
+                    if max_len < cur_len:
+                        start = i
+                        max_len = cur_len
+
+        return s[start:start + max_len]
+
+    def longestPalindromeSubseq(self, s):
+        """
+        :type s: str
+        :rtype: int
+        最长回文子串长度
+        初始化：
+        dp[i][i] = 1
+        转移：
+        if s[i] == s[j]:
+            dp[i][j] = dp[i+1][j-1] + 2
+        else:
+            dp[i][j] = max(dp[i+1][j], dp[i][j-1])
+        """
+        len_s = len(s)
+        dp = [[0 for i in range(len_s)] for i in range(len_s)]
+
+        for i in range(len_s-1, -1, -1):
+            dp[i][i] = 1
+            for j in range(i+1, len_s):
+                if s[i] == s[j]:
+                    dp[i][j] = dp[i+1][j-1] + 2
+                else:
+                    dp[i][j] = max(dp[i + 1][j], dp[i][j - 1])
+
+        return dp[0][len_s-1]
+
+    def coinChange(self, coins, amount):
+        """
+        :type coins: List[int]
+        :type amount: int
+        :rtype: int
+        j - c < j
+        01背包：
+        dp[i][j] = min(dp[i-1]dp[j], dp[i-1][j-c]+1)
+        从大到小：dp[j] = min(dp[j], dp[j-c] + 1)
+        完全背包：
+        dp[i][j] = min(dp[i-1]dp[j], dp[i][j-c]+1)
+        从小到大：dp[j] = min(dp[j], dp[j-c] + 1)
+        """
+        dp = [float('inf') for i in range(amount+1)]
+        dp[0] = 0
+        for coin in coins:
+            for j in range(coin, amount+1):
+                dp[j] = min(dp[j], dp[j-coin]+1)
+
+        return dp[amount] if dp[amount] != float('inf') else -1
+
+    def maxBag(self, w, v, m):
+        """
+
+        :param w:
+        :param v:
+        :param m:
+        :return:
+        dp[i][j] = max(dp[i-1][j], dp[i-1][j-w_i]+v_i)
+        简化, 从大到小：
+        dp[j] = max(dp[j], dp[j-w_i]+v_i)
+        """
+        # len_s = len(w)
+        # dp = [[0 for i in range(m+1)] for i in range(len_s)]
+        #
+        # for i in range(0, len_s):
+        #     for j in range(1, m+1):
+        #         if i == 0:
+        #             if j-w[i] >= 0:
+        #                 dp[i][j] = v[i]
+        #         else:
+        #             dp[i][j] = dp[i-1][j]
+        #             if j - w[i] >= 0:
+        #                 dp[i][j] = max(dp[i][j], dp[i-1][j-w[i]]+v[i])
+        # return dp[len_s-1][m]
+        dp = [0 for i in range(m+1)]
+        for i, w_i in enumerate(w):
+            for j in range(m, w_i-1, -1):
+                dp[j] = max(dp[j], dp[j-w_i] + v[i])
+        return dp[m]
+
+    def minimumTotal(self, triangle):
+        """
+        :type triangle: List[List[int]]
+        :rtype: int
+        三角形最大路径
+        转移公式：
+        if j == 0:
+            dp[j] = dp[j] + t[j]
+        elif j == len(t) - 1:
+            dp[j] = dp[len(t)-2] + t[j]
+        else:
+            dp[j] = min(dp[j - 1], dp[j]) + t[j]
+
+        """
+        if len(triangle) == 0 or len(triangle[0]) == 0:
+            return
+        # dp = [[0 for i in range(len(triangle[i]))] for i in range(len(triangle))]
+        # for i, t in enumerate(triangle):
+        #     if i == 0:
+        #         dp[0][0] = t[0]
+        #     else:
+        #         for j in range(len(t)):
+        #             if j == 0:
+        #                 dp[i][j] = dp[i-1][0] + t[j]
+        #             elif j == len(t) - 1:
+        #                 dp[i][j] = dp[i-1][-1] + t[j]
+        #             else:
+        #                 dp[i][j] = min(dp[i-1][j-1], dp[i-1][j]) + t[j]
+        #
+        # return min(dp[len(triangle)-1])
+
+        dp = [0 for i in range(len(triangle[-1]))]
+        min_path = None
+        for i, t in enumerate(triangle):
+            min_path = 2**31-1
+            if i == 0:
+                dp[0] = t[0]
+                min_path = min(min_path, dp[0])
+            else:
+                for j in range(len(t)-1, -1, -1):
+                    if j == 0:
+                        dp[j] = dp[j] + t[j]
+                    elif j == len(t) - 1:
+                        dp[j] = dp[len(t)-2] + t[j]
+                    else:
+                        dp[j] = min(dp[j - 1], dp[j]) + t[j]
+                    min_path = min(min_path, dp[j])
+        return min_path
+
+    def maxProduct(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: int
+        最大子序列乘机
+        维护最小和最大，出现负数时交换最小和最大
+        f(n) = max(f(n-1)+nums[n], nums[n])
+        """
+        if len(nums)==0:
+            return
+        imax, imin = 1, 1
+        res = -2**31
+        for i in range(0, len(nums)):
+            if nums[i] < 0:
+                imax, imin = imin, imax
+            imax = max(imax*nums[i], nums[i])
+            imin = min(imin*nums[i], nums[i])
+
+            res = max(res, imax)
+        return res
+
+    def rob(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: int
+        偷：
+        dp[i] = dp[i-2]+nums[i]
+        不偷：
+        dp[i] = dp[i-1]
+
+        dp[i] = max(dp[i-1], dp[i-2]+nums[i]
+
+        dp[n+1] = max(dp[n], dp[n-1]+num)
+        """
+        if len(nums) == 1:
+            return nums[0]
+        if len(nums) == 0:
+            return 0
+
+        dp = [0 for i in range(len(nums)+1)]
+        dp[1] = nums[0]
+        for i in range(1, len(nums)):
+            dp[i+1] = max(dp[i], dp[i-1] + nums[i])
+        return dp[-1]
+
+    def rob2(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: int
+        第一个最后相邻
+        """
+        if len(nums) == 1:
+            return nums[0]
+        if len(nums) == 0:
+            return 0
+
+        return max(self.rob(nums[1:]), self.rob(nums[:-1]))
+
+
+if __name__ == '__main__':
+    s = Solution()
+    print(s.rob2([1, 2, 3, 1]))
