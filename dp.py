@@ -252,7 +252,24 @@ class Solution(object):
 
         return max(self.rob(nums[1:]), self.rob(nums[:-1]))
 
+    def getMoneyAmount(self, n):
+        """
+        :type n: int
+        :rtype: int
+        猜数字最小花费，k代表pick的数字，dp[j][i]为区间内最小花费
+        dp[j][i] = globalmin(k + max(dp[j][k-1], dp[k+1][i])) : k in range(j, i)
+        """
+        dp = [[0]*(n+1) for _ in range(n+1)]
+        for i in range(2, n+1):
+            for j in range(i-1, 0, -1):
+                global_min = 2**31-1
+                for k in range(j, i):
+                    local_max = k + max(dp[j][k-1], dp[k+1][i])
+                    global_min = min(global_min, local_max)
+                dp[j][i] = global_min
+        return dp[1][n]
+
 
 if __name__ == '__main__':
     s = Solution()
-    print(s.rob2([1, 2, 3, 1]))
+    print(s.getMoneyAmount(5))

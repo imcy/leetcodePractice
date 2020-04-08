@@ -15,7 +15,6 @@ class Solution(object):
                 stack.append(s)
         return ''.join(stack)
 
-
     def myAtoi(self, str):
         """
         :type str: str

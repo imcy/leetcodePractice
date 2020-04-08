@@ -15,6 +15,26 @@ class Solution(object):
 
         return nums
 
+    def rotate(self, matrix):
+        """
+        :type matrix: List[List[int]]
+        :rtype: None Do not return anything, modify matrix in-place instead.
+        旋转矩阵
+        """
+        n = len(matrix)
+        i, j = 0, n - 1
+        while i < j:
+            matrix[i], matrix[j] = matrix[j], matrix[i]
+            i += 1
+            j -= 1
+
+        for i in range(n):
+            for j in range(i, n):
+                matrix[i][j], matrix[j][i] = matrix[j][i], matrix[i][j]
+        return matrix
+
+
 if __name__ == '__main__':
     s = Solution()
-    print(s.moveZeroes([0, 1, 0, 8]))
+    matrix = []
+    print(s.rotate(matrix))
