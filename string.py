@@ -59,7 +59,29 @@ class Solution(object):
 
         return max(min(result, INT_MAX), INT_MIN)
 
+    def reverseWords(self, s):
+        """
+        :type s: str
+        :rtype: str
+        """
+        stack = []
+        result = []
+        for i in s:
+            if i is ' ':
+                if len(stack) != 0:
+                    res = ''.join(stack)
+                    result.insert(0, res)
+                    stack = []
+            else:
+                stack.append(i)
+
+        if len(stack) != 0:
+            res = ''.join(stack)
+            result.insert(0, res)
+
+        return ' '.join(result)
+
 
 if __name__ == '__main__':
     s = Solution()
-    print(s.removeDuplicates("abbaca"))
+    print([s.reverseWords("blue is sky the")])
