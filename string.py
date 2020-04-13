@@ -81,7 +81,53 @@ class Solution(object):
 
         return ' '.join(result)
 
+    def isNumber(self, s):
+        """
+        :type s: str
+        :rtype: bool
+        """
+        # 扫描整数
+        def scanInterger(index, s):
+            if s[index] in ['+', '-']:
+                index += 1
+            return scanUnsignedInterger(index, s)
+
+        def scanUnsignedInterger(index, s):
+            pre = index
+            while index < len(s) and '0' <= s[index] <= '9':
+                index += 1
+            return index > pre, index
+
+        s = s.strip(' ')
+        index = 0
+        if s == '':
+            return False
+
+        number, index = scanInterger(index, s)
+
+        if index > len(s) - 1:
+            return number
+
+        if index < len(s) and s[index] == '.':
+            index += 1
+            if index > len(s) - 1:
+                return number
+            res, index = scanUnsignedInterger(index, s)
+            number = number or res
+
+        if index < len(s) and s[index] in ['e', 'E']:
+            index += 1
+            if index > len(s) - 1:
+                return False
+            res, index = scanInterger(index, s)
+            number = number and res
+
+        if index < len(s):
+            return False
+        return number
+
 
 if __name__ == '__main__':
     s = Solution()
-    print([s.reverseWords("blue is sky the")])
+    # print([s.reverseWords("blue is sky the")])
+    print(s.isNumber('-1E-16'))
