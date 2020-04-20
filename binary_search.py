@@ -103,6 +103,83 @@ class Solution(object):
 
 if __name__ == '__main__':
     s = Solution()
-    arr = [2, 2]
-    print(s.guessNumber(10))
+    # arr = [2, 2]
+    # print(s.guessNumber(10))
+    string = '''[
+
+  {
+
+    "name":"张国立",
+
+    "sex":"男",
+
+    "email":"zhangguoli@123.com",
+
+    "url":"./img/1.jpg"
+
+  },
+
+  {
+
+    "name":"张铁林",
+
+    "sex":"男",
+
+    "email":"zhangtieli@123.com",
+
+    "url":"./img/2.jpg"
+
+  },
+
+  {
+
+    "name":"邓婕",
+
+    "sex":"女",
+
+    "email":"zhenjie@123.com",
+
+    "url":"./img/3.jpg"
+
+  },
+
+  {
+
+    "name":"张国立",
+
+    "sex":"男",
+
+    "email":"zhangguoli@123.com",
+
+    "url":"./img/4.jpg"
+
+  },
+
+  {
+
+    "name":"张铁林",
+
+    "sex":"男",
+
+    "email":"zhangtieli@123.com",
+
+    "url":"./img/5.jpg"
+
+  },
+
+  {
+
+    "name":"邓婕",
+
+    "sex":"女",
+
+    "email":"zhenjie@123.com",
+
+    "url":"./img/6.jpg"
+
+  }
+
+]
+'''
+    print([string.split('\n')])
     # print(arr[2:])

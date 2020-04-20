@@ -16,4 +16,11 @@ class Solution(object):
 
 if __name__ == '__main__':
     s = Solution()
-    print(s.twoSum([3, 2, 3], 6))
+    # print(s.twoSum([3, 2, 3], 6))
+    a = [2, 4, 5]
+    b = ['a', 'b', 'c']
+    temp = dict(zip(a, b))
+    k = 4
+    print(temp)
+    if k in temp:
+        print(temp[k])

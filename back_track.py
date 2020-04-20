@@ -112,7 +112,40 @@ class Solution(object):
         dfs(0, 0)
         return result
 
+    def numIslands(self, grid):
+        """
+        :type grid: List[List[str]]
+        :rtype: int
+        """
+        directions = [(-1, 0), (0, -1), (1, 0), (0, 1)]
+
+        m = len(grid)
+        if m == 0:
+            return 0
+        n = len(grid[0])
+        visited = [[False for _ in range(n)] for _ in range(m)]
+        count = 0
+
+        def dfs(x, y):
+            visited[x][y] = True
+            for direction in directions:
+                new_x = x + direction[0]
+                new_y = y + direction[1]
+                if 0 <= new_x < m and 0 <= new_y < n and visited[new_x][new_y] is False and grid[new_x][new_y] == '1':
+                    dfs(new_x, new_y)
+
+        for i in range(m):
+            for j in range(n):
+                if grid[i][j] == '1' and visited[i][j] == False:
+                    count += 1
+                    dfs(i, j)
+        return count
+
 
 if __name__ == '__main__':
     s = Solution()
-    print(s.permuteUnique([1, 1, 2]))
+    grid = [['1', '1', '1', '0', '1'],
+            ['1', '1', '0', '1', '0'],
+            ['1', '1', '0', '0', '0'],
+            ['0', '0', '0', '1', '1']]
+    print(s.numIslands(grid))

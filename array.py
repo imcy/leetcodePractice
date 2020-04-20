@@ -33,8 +33,35 @@ class Solution(object):
                 matrix[i][j], matrix[j][i] = matrix[j][i], matrix[i][j]
         return matrix
 
+    def merge(self, intervals):
+        """
+        :type intervals: List[List[int]]
+        :rtype: List[List[int]]
+        """
+        n = len(intervals)
+        if n <= 1:
+            return intervals
+        intervals = sorted(intervals, key=lambda val: val[0])
+        result = []
+        left = intervals[0][0]
+        right = intervals[0][1]
+
+        print(intervals)
+        for i in range(1, n):
+            if intervals[i][0] > right:
+                result.append([left, right])
+                left = intervals[i][0]
+                right = intervals[i][1]
+            else:
+                right = max(right, intervals[i][1])
+
+            if i == len(intervals) - 1:
+                result.append([left, right])
+
+        return result
+
 
 if __name__ == '__main__':
     s = Solution()
-    matrix = []
-    print(s.rotate(matrix))
+    array = [[8, 9], [1, 2], [3, 10]]
+    print(s.merge(array))
