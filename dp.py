@@ -342,7 +342,49 @@ class Solution(object):
 
         return dp(K, N)
 
+    def waysToChange(self, n):
+        # dp[i] = (dp[i] + dp[i - coin])
+        coins = [1, 5, 10, 25]
+        dp = [0 for i in range(n+1)]
+
+        for coin in coins:
+            for i in range(coin, n):
+                dp[i] = dp[i] + dp[i-coin]
+        return dp[n] % 1000000007
+
+    def pileBox(self, box):
+        # 能堆到最大上面：dp[i] = maxhi + box[i][2]
+        # 不能堆dp[i]=box[i][2]，找能堆的：dp[i] = max(dp[k]+box[i][2], dp[i])
+        def helper(b1, b2):
+            for j in range(3):
+                if b1[j] <= b2[j]:
+                    return False
+            return True
+
+        box.sort()
+        dp = [0 for _ in range(len(box))]
+        dp[0] = box[0][2]
+        maxhi = dp[0]
+        maxbox = box[0]
+        for i in range(1, len(box)):
+            canpile = helper(box[i], maxbox)
+            if canpile:
+                dp[i] = maxhi + box[i][2]
+
+            else:
+                dp[i] = box[i][2]
+                for k in range(i):
+                    canpile2 = helper(box[i], box[k])
+                    if canpile2:
+                        dp[i] = max(dp[i], dp[k]+box[i][2])
+
+            if dp[i] > maxhi:
+                maxhi = dp[i]
+                maxbox = box[i]
+
+        return maxhi
+
 
 if __name__ == '__main__':
     s = Solution()
-    print(s.superEggDrop(1, 1))
+    print(s.pileBox([[2, 3, 4], [4, 6, 8]]))

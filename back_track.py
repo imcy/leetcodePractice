@@ -141,11 +141,48 @@ class Solution(object):
                     dfs(i, j)
         return count
 
+    def permutation(self, S):
+        S = sorted(S)
+        result = []
+        res_ = []
+        n = len(S)
+        visited = [False for _ in range(n)]
+
+        def dfs(i):
+            if i == n:
+                string = ''.join(res_)
+                result.append(string)
+                return
+            for j in range(0, n):
+                if not visited[j]:
+                    if j > 0 and S[j] == S[j-1] and visited[j-1] is False:
+                        continue
+                    res_.append(S[j])
+                    visited[j] = True
+                    dfs(i+1)
+                    visited[j] = False
+                    res_.pop()
+
+        dfs(0)
+        return result
+
+    def letterCasePermutation(self, S):
+        result = []
+
+        def dfs(s, res_):
+            if len(s) == 0:
+                result.append(''.join(res_))
+                return
+            if s[0].isalpha():
+                dfs(s[1:], res_ + [s[0].upper()])
+                dfs(s[1:], res_ + [s[0].lower()])
+            else:
+                dfs(s[1:], res_ + [s[0]])
+
+        dfs(S, [])
+        return result
+
 
 if __name__ == '__main__':
     s = Solution()
-    grid = [['1', '1', '1', '0', '1'],
-            ['1', '1', '0', '1', '0'],
-            ['1', '1', '0', '0', '0'],
-            ['0', '0', '0', '1', '1']]
-    print(s.numIslands(grid))
+    print(s.letterCasePermutation("a1b2"))

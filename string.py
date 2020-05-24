@@ -130,4 +130,8 @@ class Solution(object):
 if __name__ == '__main__':
     s = Solution()
     # print([s.reverseWords("blue is sky the")])
-    print(s.isNumber('-1E-16'))
+    # print(s.isNumber('-1E-16'))
+    a = 'ab'
+    b = 'abc'
+    if a in b:
+        print(a)

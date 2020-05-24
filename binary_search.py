@@ -163,7 +163,7 @@ if __name__ == '__main__':
 
     "email":"zhangtieli@123.com",
 
-    "url":"./img/5.jpg"
+    "url":"./img/524.jpg"
 
   },
 
